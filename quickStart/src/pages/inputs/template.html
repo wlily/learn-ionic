@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Inputs</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form (submit)="processForm()" [formGroup]="form">
+
+    <ion-list inset>
+      <ion-item>
+        <ion-label>Age</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>FirstName</ion-label>
+        <ion-input formControlName="firstName" type="text" placeholder="First Name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>LastName</ion-label>
+        <ion-input formControlName="lastName" type="text" placeholder="Last Name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input type="password"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div padding>
+      <button ion-button block type="submit">Create Account</button>
+    </div>
+  </form>
+</ion-content>

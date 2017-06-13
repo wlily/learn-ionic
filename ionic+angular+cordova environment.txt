@@ -1,0 +1,104 @@
+1. 安装node.js
+下载路径：
+https://nodejs.org/en/download/ 
+选Linux Binaries (x86/x64)下载
+
+$cd xxxxx
+$tar -zxvf node-v6.10.3-linux-x64.tar.xz
+
+在~/.bashrc中将node目录设置到全局变量PATH中
+export NODE_HOME=xxxxx/node-v6.10.3-linux-x64
+export PATH=${NODE_HOME}/bin:$PATH
+
+$node -v 检验node可用
+$npm -v  检验npm可用
+
+2. 给NPM设置代理和镜像
+~/.npmrc文件中添加如下内容：
+proxy=http://xxx:xx/
+https-proxy=http://xxx:xx
+#registry=http://registry.cnpmjs.org
+registry = https://registry.npm.taobao.org
+sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+
+3. 安装ionic
+npm install -g ionic
+如果安装失败，一般是网络慢，文件下载不完整，重新执行
+$ionic 测试ionic安装成功
+
+4. 安装cordova
+npm install -g cordova
+如果安装失败，一般是网络慢，文件下载不完整，重新执行
+$cordova -v 测试cordova安装成功
+
+5. 给ionic设置代理
+在~/.bashrc中添加
+export PROXY=http://xxx:xx
+
+6. 创建第一个ionic app
+$ionic start firstApp tabs
+
+7. cd firstApp 目录， 执行$ionic serve，可以在浏览器中可查看app效果
+
+如果只是想学习hybrid应用开发，并在PC上调试，上面步骤就可以了
+
+#############如果想在android手机上测试或使用模拟器测试，还需要做如下配置，将app打包成apk######################
+8. 安装jdk
+下载页:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+在~/.bashrc添加环境变量
+export JAVA_HOME=xxxxxxx/jdk1.8.0_131
+export PATH=${JAVA_HOME}/bin:$PATH
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+
+9. 安装andriod sdk
+$wget http://dl.gmirror.org/android/android-sdk_r24.4.1-linux.tgz
+$tar -zxvf android-sdk_r24.4.1-linux.tgz
+          
+在~/.bashrc添加环境变量
+export ANDROID_HOME="/YOUR_PATH/android-sdk-linux"
+export PATH="$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools"
+export JAVA_CMD="${JAVA_HOME}/bin/java"
+
+$andriod，能打开andriod sdk manager， 则安装成功
+
+10. 在android ask manager中设置proxy代理，安装sdk platform-tools, sdk build-tools, android api
+这一步有两个用处：
+一是cordova build android时，需要用到android sdk tools
+二是android模拟器启动需要用到这些东东
+
+11. 在android ask manager中创建AVD(Android虚拟设备)
+
+12. android应用使用gradle编译，所以需要下载gradle， 最新版本是3.5， 添加到环境变量
+给gradle设置代理
+~/.gradle/gradle.properties
+systemProp.http.proxyHost=proxyxa.zte.com.cn
+systemProp.http.proxyPort=80
+systemProp.https.proxyHost=proxyxa.zte.com.cn
+systemProp.https.proxyPort=80
+
+虽然单独安装了gradle，但是使用cordova platform add android之后，生成的GradleBuilder.js会去下载gradle-3.3-all.zip
+在有代理的情况下，这个下载特别慢，可以手动下载
+然后将其放到ionicApp/platforms/android/gradle/wrapper目录中 
+并在build或模拟器测试之前做如下设置: 
+$export CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL="gradle-3.3-all.zip"
+
+13. android模拟器测试
+$export CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL="gradle-3.3-all.zip"
+$cordova emulate android
+
+14. 添加android平台，build未签名apk
+$cd ionicApp/
+$cordova platform add android
+$export CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL="gradle-3.3-all.zip"
+$cordova  build --release  android
+
+15. 给apk签名
+$cd platforms/android/build/outputs/apk/
+$keytool -genkey -v -keystore firstApp.keystore -keyalg RSA -validity 20000 -alias testFirstApp
+$jarsigner -verbose -keystore firstApp.keystore -signedjar testFirstApp-signed.apk android-release-unsigned.apk  testFirstApp
+$jarsigner -verify -verbose -certs testFirstApp-signed.apk
+
+
+
+
